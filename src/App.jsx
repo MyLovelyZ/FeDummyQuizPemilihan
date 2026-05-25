@@ -49,8 +49,9 @@ export default function App() {
           <Route path="/quiz" element={<PublicQuizList />} />
           <Route path="/quiz/:id" element={<PublicQuizTake />} />
 
-          <Route path="/" element={<Navigate to="/quiz" replace />} />
-          <Route path="*" element={<Navigate to="/quiz" replace />} />
+          {/* In Electron (admin-only desktop app) default to /login; on the web default to /quiz */}
+          <Route path="/" element={<Navigate to={window.electron?.isElectron ? '/login' : '/quiz'} replace />} />
+          <Route path="*" element={<Navigate to={window.electron?.isElectron ? '/login' : '/quiz'} replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

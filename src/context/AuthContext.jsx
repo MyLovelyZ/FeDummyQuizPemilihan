@@ -15,9 +15,8 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     const res = await apiLogin({ email, password })
-    const { token, role } = res.data
-    // role from API is a string like "admin" or "superadmin"
-    const userData = { role }
+    const { token, user } = res.data.data
+    const userData = { role: user.role }
     localStorage.setItem('token', token)
     localStorage.setItem('user', JSON.stringify(userData))
     setUser(userData)

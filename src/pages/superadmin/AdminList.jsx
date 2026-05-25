@@ -124,7 +124,7 @@ export default function AdminList() {
                       <BanBadge bannedAt={admin.banned_at} />
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex flex-wrap items-center justify-end gap-2">
                         <Link
                           to={`/superadmin/admins/${admin.id}`}
                           className="px-3 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded-md hover:bg-blue-100"

@@ -1,8 +1,29 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getPublicQuiz, submitPublicQuiz } from '../../api'
+import { getPublicQuiz, submitPublicQuiz, sendResult } from '../../api'
 
-function ResultCard({ score, gradeLabel, minPoint, maxPoint, onRetry }) {
+function ResultCard({ score, gradeLabel, minPoint, maxPoint, totalQuestions, onRetry }) {
+  const [email, setEmail] = useState('')
+  const [emailSending, setEmailSending] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
+  const [emailError, setEmailError] = useState('')
+
+  const handleSendEmail = async (e) => {
+    e.preventDefault()
+    setEmailError('')
+    setEmailSending(true)
+    try {
+      const total = maxPoint !== null ? maxPoint : totalQuestions
+      const grade = gradeLabel ?? 'Tidak ada penilaian yang cocok'
+      await sendResult({ email, score, total, grade })
+      setEmailSent(true)
+    } catch (err) {
+      setEmailError(err.response?.data?.message || 'Gagal mengirim email. Coba lagi.')
+    } finally {
+      setEmailSending(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-8 text-center">
@@ -34,6 +55,36 @@ function ResultCard({ score, gradeLabel, minPoint, maxPoint, onRetry }) {
             <p className="text-sm text-gray-400 mt-3">
               Tidak ada penilaian yang cocok untuk skor ini.
             </p>
+          )}
+        </div>
+
+        <div className="mb-6">
+          {emailSent ? (
+            <p className="text-sm font-medium text-green-600">Email berhasil dikirim!</p>
+          ) : (
+            <form onSubmit={handleSendEmail} className="flex flex-col gap-2 text-left">
+              <p className="text-sm text-gray-500 text-center">Kirim hasil ke email:</p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  required
+                  placeholder="nama@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                />
+                <button
+                  type="submit"
+                  disabled={emailSending}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors shrink-0"
+                >
+                  {emailSending ? 'Mengirim...' : 'Kirim'}
+                </button>
+              </div>
+              {emailError && (
+                <p className="text-xs text-red-600">{emailError}</p>
+              )}
+            </form>
           )}
         </div>
 
@@ -112,6 +163,7 @@ export default function PublicQuizTake() {
         gradeLabel={result.grade_label}
         minPoint={result.min_point}
         maxPoint={result.max_point}
+        totalQuestions={totalQuestions}
         onRetry={loadQuiz}
       />
     )

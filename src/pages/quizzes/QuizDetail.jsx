@@ -12,8 +12,7 @@ function GradeRow({ grade, onEdit, onDelete }) {
   return (
     <tr className="hover:bg-gray-50">
       <td className="px-4 py-3 font-medium text-gray-900">{grade.label}</td>
-      <td className="px-4 py-3 text-gray-600">{grade.min_point}</td>
-      <td className="px-4 py-3 text-gray-600">{grade.max_point}</td>
+      <td className="px-4 py-3 text-gray-600">{grade.min_point} – {grade.max_point}</td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center justify-end gap-2">
           <button
@@ -245,8 +244,7 @@ export default function QuizDetail() {
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Label</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Min Poin</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Maks Poin</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500">Rentang Poin</th>
                   <th className="text-right px-4 py-3 font-medium text-gray-500">Aksi</th>
                 </tr>
               </thead>

@@ -77,5 +77,6 @@ export const deleteAdminQuiz = (id) => api.delete(`/superadmin/admins/quizzes/${
 export const getPublicQuizzes = () => api.get('/public/quizzes')
 export const getPublicQuiz = (id) => api.get(`/public/quizzes/${id}`)
 export const submitPublicQuiz = (id, answers) => api.post(`/public/quizzes/${id}/submit`, { answers })
+export const sendResult = (data) => api.post('/send-result', data)
 
 export default api
